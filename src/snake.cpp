@@ -77,3 +77,7 @@ bool Snake::SnakeCell(int x, int y) {
   }
   return false;
 }
+
+std::vector<SDL_Point> Snake::BodyPosition(){
+  return body;
+}

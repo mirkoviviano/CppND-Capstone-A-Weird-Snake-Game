@@ -39,3 +39,8 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
     }
   }
 }
+
+void Controller::MoveEnemy(bool &running, Snake &enemy) const{
+  enemy.direction = Snake::Direction::kUp;
+  ChangeDirection(enemy, Snake::Direction::kUp, Snake::Direction::kDown);
+}

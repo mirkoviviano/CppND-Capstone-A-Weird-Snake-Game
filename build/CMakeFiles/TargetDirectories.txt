@@ -1,3 +1,0 @@
-/Users/mirkoviviano/Documents/GitHub/Udacity/CppND-Capstone-A-Weird-Snake-Game/build/CMakeFiles/rebuild_cache.dir
-/Users/mirkoviviano/Documents/GitHub/Udacity/CppND-Capstone-A-Weird-Snake-Game/build/CMakeFiles/edit_cache.dir
-/Users/mirkoviviano/Documents/GitHub/Udacity/CppND-Capstone-A-Weird-Snake-Game/build/CMakeFiles/SnakeGame.dir

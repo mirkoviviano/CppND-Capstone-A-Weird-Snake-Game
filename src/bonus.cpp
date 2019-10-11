@@ -3,7 +3,7 @@
 #include <iostream>
 
 int Bonus::GetPower(){
-    Bonus::Power power = Bonus::Power(rand()%4);
+    Bonus::Power power = Bonus::Power(rand() % 4 + 1);
 
     return power;
 }

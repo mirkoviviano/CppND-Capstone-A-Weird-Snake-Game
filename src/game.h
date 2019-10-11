@@ -24,22 +24,23 @@ class Game {
     SDL_Point food;
     SDL_Point power;
     Timer timer;
-    int ActiveBonus;
+    
     std::random_device dev;
     std::mt19937 engine;
     std::uniform_int_distribution<int> random_w;
     std::uniform_int_distribution<int> random_h;
-  
 
+    int ActiveBonus;
     int score{0};
     bool HasBonus = false;
     float SaveSpeed;
 
     void PlaceFood();
     void PlaceBonus();
-    void ActivatePower();
     void Update();
     void MoveEnemy();
+    void ActivateBonus();
+    void DeactivateBonus();
 };
 
 #endif

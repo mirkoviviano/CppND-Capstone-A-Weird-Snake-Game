@@ -56,28 +56,14 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
 
-    if(HasBonus){
-      power.x = 1000000;
-      power.y = 1000000;
-      // std::cout << "HasBonus " << HasBonus << std::endl;
-      // std::cout << timer.elapsedSeconds() << std::endl;
-      // std::cout << "active bonus: " << ActiveBonus << std::endl;
-      if(timer.elapsedSeconds() >= 5.000){
-        HasBonus = false;
-        // std::cout << "HasBonus " << HasBonus << std::endl;
-        timer.stop();
-        if(ActiveBonus == 0){
-          snake.speed -= 0.5;
-          //std::cout << "now speed is " << snake.speed << std::endl;
-          PlaceBonus();
-          //std::cout << "powe {" << power.x << ", " << power.y << "}" << std::endl; 
-        }
-        else if(ActiveBonus == 1){
-          std::cout << "IMMORTAL" << std::endl;
-        }
-      }
-    }
-      
+    // if(HasBonus){
+    //   power.x = 1000000;
+    //   power.y = 1000000;
+    //   if(timer.elapsedSeconds() >= 5.000){
+    //     std::cout << "time over" << std::endl;
+    //     DeactivateBonus();
+    //   }
+    // }
   }
 }
 
@@ -93,6 +79,9 @@ void Game::PlaceFood() {
       food.y = y;
       return;
     }
+    else {
+      continue;
+    }
   }
 }
 
@@ -102,16 +91,19 @@ void Game::PlaceBonus() {
     x = random_w(engine);
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
-    // food.
+    // bonus.
     if (!snake.SnakeCell(x, y)) {
       power.x = x;
       power.y = y;
       return;
     }
+    else {
+      continue;
+    }
   }
 }
 
-void Game::Update() {  //auto add_bonus_time;
+void Game::Update() { 
   if (!snake.alive) return;
 
   snake.Update();
@@ -125,59 +117,94 @@ void Game::Update() {  //auto add_bonus_time;
 
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
+    if(snake.doublePoints)
+      score += 2;
     score++;
     PlaceFood();
     // Grow snake and increase speed.
-    snake.GrowBody();
-    enemy.GrowBody();
+    if(snake.doubleGrowth)
+      snake.GrowBody(true);
+    
+    snake.GrowBody(false);
+    enemy.GrowBody(false);
     snake.speed += 0.02;
     enemy.speed += 0.01;
   }
   
-  if(snake.SnakeCell(power.x, power.y)){
-    std::cout << "fji" << std::endl;
-    SaveSpeed = snake.speed;
-    //ActiveBonus = bonus.GetPower();
-    // switch(ActiveBonus){
-    //   case 0: 
-    //     // snake.speed += 0.5;
-    //     // HasBonus = true;
-    //     // timer.start();
-    //     std::cout << "Bonus activated: speed " << ActiveBonus << std::endl;
-    //     break;
-    //   case 1:
-    //     std::cout << "Bonus activated: immortal " << ActiveBonus << std::endl;
-    //     break;
-    //   case 2: 
-    //     std::cout << "Bonus activated: 2points " << ActiveBonus << std::endl;
-    //     break;
-    //   case 3:
-    //     std::cout << "Bonus activated: 2points " << ActiveBonus << std::endl;
-    //     break;
-    // }
+  // if(power.x == new_x && power.y == new_y){
+    // SaveSpeed = snake.speed;
+    // ActivateBonus();
+    // std::cout << "Power" << std::endl;
+  // }
+
+  for(const auto item: enemy.BodyPosition()){
+    if(new_x == item.x && new_y == item.y && !snake.immortal){
+      snake.alive = false;
+      std::cout << "=====================" << std::endl;
+      std::cout <<  "     GAME  OVER    "  << std::endl;
+      std::cout << "=====================" << std::endl;
+    }
   }
 
-  // for(const auto item: enemy.BodyPosition()){
-  //   if(new_x == item.x && new_y == item.y){
-  //     snake.alive = false;
-  //     std::cout << "=====================" << std::endl;
-  //     std::cout <<  "     GAME  OVER    "  << std::endl;
-  //     std::cout << "=====================" << std::endl;
-  //   }
-  // }
-
-  // if((new_x == e_new_x && new_y == e_new_y && snake.size > 1)){
-  //   snake.alive = false;
-  //   std::cout << "=====================" << std::endl;
-  //   std::cout <<  "     GAME  OVER    "  << std::endl;
-  //   std::cout << "=====================" << std::endl;
-  // }
+  if((new_x == e_new_x && new_y == e_new_y && snake.size > 1 && !snake.immortal)){
+    snake.alive = false;
+    std::cout << "=====================" << std::endl;
+    std::cout <<  "     GAME  OVER    "  << std::endl;
+    std::cout << "=====================" << std::endl;
+  }
   
 }
 
-void Game::ActivatePower(){
-  
-}
+
+// void Game::ActivateBonus(){
+//   HasBonus = true;
+//   ActiveBonus = bonus.GetPower();
+//   std::cout << "Bonus is now active: " << ActiveBonus << std::endl;
+//   timer.start();
+//   if(ActiveBonus == 0){
+//     snake.speed += 0.5;
+//     HasBonus = true;
+//     std::cout << "Bonus activated: speed " << ActiveBonus << std::endl;
+//   }
+//   else if(ActiveBonus == 1){
+//     snake.immortal = true;
+//     std::cout << "Bonus activated: immortal " << ActiveBonus << std::endl;
+//   }
+//   else if(ActiveBonus == 2){
+//     snake.doublePoints = true;
+//     std::cout << "Bonus activated: 2points " << ActiveBonus << std::endl;
+//   }
+//   else if(ActiveBonus == 3){
+//     snake.doubleGrowth = true;
+//     std::cout << "Bonus activated: 2growth " << ActiveBonus << std::endl;
+//   }
+// }
+
+// void Game::DeactivateBonus(){
+//   HasBonus = false;
+//         timer.stop();
+//         std::cout << "Bonus not active" << std::endl;
+//         switch (ActiveBonus){
+//           case 0:
+//             snake.speed -= 0.5;
+//             PlaceBonus();
+//             break;
+//           case 1:
+//             snake.immortal = false;
+//             PlaceBonus();
+//             break;
+//           case 2:
+//             snake.doublePoints = false;
+//             PlaceBonus();
+//             break;
+//           case 3: 
+//             snake.doubleGrowth = false; 
+//             PlaceBonus();
+//             break;
+//           default:
+//             break;
+//         }
+// }
 
 void Game::MoveEnemy(){
   Snake::Direction direction = Snake::Direction(rand()%4);

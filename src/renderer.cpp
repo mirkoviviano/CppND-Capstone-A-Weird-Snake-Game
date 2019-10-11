@@ -13,28 +13,28 @@ Renderer::Renderer(const std::size_t screen_width,
       random_w(0, static_cast<int>(grid_width)-1),
       random_h(0, static_cast<int>(grid_height)-1)
       {
-  // Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    std::cerr << "SDL could not initialize.\n";
-    std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
-  }
+        // Initialize SDL
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+          std::cerr << "SDL could not initialize.\n";
+          std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
+        }
 
-  // Create Window
-  sdl_window = SDL_CreateWindow("Snake Game", SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED, screen_width,
-                                screen_height, SDL_WINDOW_SHOWN);
+        // Create Window
+        sdl_window = SDL_CreateWindow("Snake Game", SDL_WINDOWPOS_CENTERED,
+                                      SDL_WINDOWPOS_CENTERED, screen_width,
+                                      screen_height, SDL_WINDOW_SHOWN);
 
-  if (nullptr == sdl_window) {
-    std::cerr << "Window could not be created.\n";
-    std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
-  }
+        if (nullptr == sdl_window) {
+          std::cerr << "Window could not be created.\n";
+          std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
+        }
 
-  // Create renderer
-  sdl_renderer = SDL_CreateRenderer(sdl_window, -1, SDL_RENDERER_ACCELERATED);
-  if (nullptr == sdl_renderer) {
-    std::cerr << "Renderer could not be created.\n";
-    std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
-  }
+        // Create renderer
+        sdl_renderer = SDL_CreateRenderer(sdl_window, -1, SDL_RENDERER_ACCELERATED);
+        if (nullptr == sdl_renderer) {
+          std::cerr << "Renderer could not be created.\n";
+          std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
+        }
 }
 
 Renderer::~Renderer() {
@@ -58,15 +58,9 @@ void Renderer::Render(Snake const snake, Snake const enemy, SDL_Point const &foo
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render power
-  SDL_SetRenderDrawColor(sdl_renderer, 62, 161, 0, 0xFF);
-  block.x = power.x * block.w;
-  block.y = power.y * block.h;
-  SDL_RenderFillRect(sdl_renderer, &block);
-  
-  // Render enemy
-  // SDL_SetRenderDrawColor(sdl_renderer, 161, 5, 0, 0xFF);
-  // block.x = enemy.x * block.w;
-  // block.y = enemy.y * block.h;
+  // SDL_SetRenderDrawColor(sdl_renderer, 62, 161, 0, 0xFF);
+  // block.x = power.x * block.w;
+  // block.y = power.y * block.h;
   // SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render snake's body
@@ -95,13 +89,11 @@ void Renderer::Render(Snake const snake, Snake const enemy, SDL_Point const &foo
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 
-
   // Render enemy's head
   block.x = static_cast<int>(enemy.head_x) * block.w;
   block.y = static_cast<int>(enemy.head_y) * block.h;
   SDL_SetRenderDrawColor(sdl_renderer, 161, 5, 0, 0xFF);
   SDL_RenderFillRect(sdl_renderer, &block);
-
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -118,4 +110,3 @@ void Renderer::UpdateWindow(){
   SDL_SetWindowSize(sdl_window, w, h);
   SDL_SetWindowPosition(sdl_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
-
